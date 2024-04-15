@@ -1,0 +1,12 @@
+Rock Papper Scissors Game
+
+Pseudocode Used
+
+• User inputs (case insensitive) string of rock, paper or scissors.
+*The above would be better served with buttons, but that's for the GUI part.
+• Computer generates one of those same 3 strings at random.
+• Rock > scissors. Scissors > paper. Paper > rock.
+• If the user input beats computer input, output "You win! X beats Y."
+• If the user input ties computer input, output "Tie! Both players used Z."
+• If the user input loses to computer input, output "You lose! Y beats X."
+
