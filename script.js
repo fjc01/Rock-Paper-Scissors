@@ -1,14 +1,5 @@
-/*User's Choice*/
-
-function caseSensitivityFix(input){
-    return input.toLowerCase().charAt(0).toUpperCase() + input.toLowerCase().slice(1);
-}
-
-const userInput = prompt('Rock, Paper or Scissors?');
-
-const transformedUserInput = caseSensitivityFix(userInput);
-
-console.log(transformedUserInput)
+let userScore = 0;
+let computerScore = 0;
 
 /*Computer's Choice*/
 
@@ -20,101 +11,69 @@ function getComputerChoice(){
 
 const computerChoice = getComputerChoice();
 
-console.log(computerChoice);
-
-/*Computer's Input has to come after the User's Input, otherwise players can cheat by using the console and console.log to see what the computer picked.*/
-
 /*Plays A Game Round*/
 
-function playRound(transformedUserInput, computerChoice){
-
-    if (transformedUserInput === computerChoice){
+function playRound(userInput, computerChoice) {
+    if (userInput === computerChoice) {
         return "It's a tie! Both players used the same item.";
-    }
-    else if (transformedUserInput === 'Rock' && computerChoice === 'Scissors'){
-        return "You win! Rock beats Scissors.";      
-    }
-    else if (transformedUserInput === 'Scissors' && computerChoice === 'Paper'){
-        return "You win! Scissors beats Paper.";      
-    }
-    else if (transformedUserInput === 'Paper' && computerChoice === 'Rock'){
-        return "You win! Paper beats Rock.";      
-    }
-    else if (transformedUserInput === 'Rock' && computerChoice === 'Paper'){
-        return "You lose! Paper beats Rock.";      
-    }
-    else if (transformedUserInput === 'Scissors' && computerChoice === 'Rock'){
-        return "You lose! Rock beats Scissors.";      
-    }
-    else if (transformedUserInput === 'Paper' && computerChoice === 'Scissors'){
-        return "You lose! Scissors beats Paper.";      
-    }
-    else {
+    } else if (userInput === 'Rock' && computerChoice === 'Scissors') {
+        userScore++;
+        return "You win! Rock beats Scissors.";
+    } else if (userInput === 'Scissors' && computerChoice === 'Paper') {
+        userScore++;
+        return "You win! Scissors beats Paper.";
+    } else if (userInput === 'Paper' && computerChoice === 'Rock') {
+        userScore++;
+        return "You win! Paper beats Rock.";
+    } else if (userInput === 'Rock' && computerChoice === 'Paper') {
+        computerScore++;
+        return "You lose! Paper beats Rock.";
+    } else if (userInput === 'Scissors' && computerChoice === 'Rock') {
+        computerScore++;
+        return "You lose! Rock beats Scissors.";
+    } else if (userInput === 'Paper' && computerChoice === 'Scissors') {
+        computerScore++;
+        return "You lose! Scissors beats Paper.";
+    } else {
         return "You used an invalid item, try again.";
     }
 }
 
-console.log(playRound(transformedUserInput, computerChoice));
-alert(playRound(transformedUserInput, computerChoice));
+function updateScore() {
+    document.getElementById('userScore').textContent = userScore;
+    document.getElementById('computerScore').textContent = computerScore;
 
-alert("I challenge you to MORTAL KOMBAT! (5 rounds)")
-
-/*Plays The Game 5 Times*/
-
-function playGame(){
-    let userScore = 0;
-    let computerScore = 0;
-
-    for (let i = 1; i<=5; i++){
-
-        console.log(`Round ${i}`);
-        alert(`Round ${i}, FIGHT!`);
-
-        const userInput = prompt('Rock, Paper or Scissors?');
-        const transformedUserInput = caseSensitivityFix(userInput);
-        console.log(transformedUserInput)
-
-        const computerChoice = getComputerChoice();
-        console.log(`Computer chose: ${computerChoice}`);
-
-        const roundResult = playRound(transformedUserInput, computerChoice);
-        console.log(roundResult);
-        alert(roundResult);
-
-        if (roundResult.includes('You win')){
-            userScore++;
+    if (userScore === 5 || computerScore === 5) {
+        if (userScore === 5) {
+            alert("You win! You reached 5 points first.");
+        } else {
+            alert("Computer wins! It reached 5 points first.");
         }
-        else if (roundResult.includes('You lose')){
-            computerScore++;
-        }
-    }
 
-    console.log(`Final Score:
-        You: ${userScore}
-        Computer: ${computerScore}`);
-
-    alert(`Final Score:
-    You: ${userScore}
-    Computer: ${computerScore}`);
-
-    if (userScore > computerScore) {
-        console.log("You won the game!");
-        alert("You won the game!");
-    } else if (userScore < computerScore) {
-        console.log("You lost the game!");
-        alert("You lost the game!");
-    } else {
-        console.log("It's a tie!");
-        alert("It's a tie!");
+        userScore = 0;
+        computerScore = 0;
+        document.getElementById('results').innerHTML = '';
     }
 }
 
-playGame();
+function handleUserChoice(userInput){
+    const computerChoice = getComputerChoice();
+    const result = playRound(userInput, computerChoice);
+    const resultElement = document.getElementById('results');
+    const newResultDiv = document.createElement('div'); // Create a new <div> element
+    newResultDiv.textContent = result; // Set the text content of the new <div> to the result
+    resultElement.appendChild(newResultDiv); // Append the new <div> to the result <div>
+    updateScore();
+}
 
-/*
-NOTES:
-Added alerts after most console.logs to make the game more quick to play
-There's a "bug" where if you don't input anything or use invalid inputs you can tie every time.
-I've decided to leave it for now as an easter egg because Odin Project doesn't adress this.
-Maybe I'll fix it when I get to the GUI part of the project.
-*/
+document.getElementById('Rock').addEventListener('click', function(){
+    handleUserChoice('Rock');
+});
+
+document.getElementById('Paper').addEventListener('click', function(){
+    handleUserChoice('Paper');
+});
+
+document.getElementById('Scissors').addEventListener('click', function(){
+    handleUserChoice('Scissors');
+});
